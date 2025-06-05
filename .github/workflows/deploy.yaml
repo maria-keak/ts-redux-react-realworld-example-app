@@ -1,21 +1,31 @@
-
 name: Deploy to GitHub Pages
 
 on:
   push:
     branches:
-      - master  # or your main working branch
+      - main  # your default branch
 
 permissions:
-  contents: write  # required for pushing to gh-pages
+  contents: write
 
 jobs:
-  deploy:
+  build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout source code
+      - name: Checkout source
         uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'  # or your version
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build the site
+        run: npm run build
 
       - name: Deploy /build to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
