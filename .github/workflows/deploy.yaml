@@ -1,32 +1,31 @@
-#comment
 name: Deploy to GitHub Pages
 
 on:
   push:
 
-permissions:
-  contents: write
-
 jobs:
-  build-and-deploy:
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout source
+      - name: Checkout source code
         uses: actions/checkout@v4
 
-      - name: Set up Node
+      - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18'  # or your version
+          node-version: '16'  # CRA works well with Node 16
+
+      - name: Set OpenSSL legacy provider (CRA fix for Node 17+)
+        run: echo "NODE_OPTIONS=--openssl-legacy-provider" >> $GITHUB_ENV
 
       - name: Install dependencies
-        run: npm ci
+        run: npm install
 
-      - name: Build the site
+      - name: Build site
         run: npm run build
 
-      - name: Deploy /build to GitHub Pages
+      - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
