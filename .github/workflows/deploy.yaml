@@ -1,10 +1,11 @@
+#dfgh
 name: Deploy to GitHub Pages
 
 on:
   push:
 
 jobs:
-  deploy:
+  build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
